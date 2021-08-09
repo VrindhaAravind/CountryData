@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            height:93vh;
+            width:90vw;
+        background-image: linear-gradient( 117deg,  rgba(123,216,96,1) 39.2%, rgba(255,255,255,1) 156.2% );
+        background-repeat:no-repeat;
+        }
+        #btn{
+            margin-left: 120px;
+        }
+        </style>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row mt-5">
+
+            <div class="col-4"><img src="./countrydata.png" alt="" style="width: 250px; height: 180px;"></div>
+            <div class="col-6" >
+                <h2 style="color: green; text-shadow :2px 2px yellowgreen;">COUNTRY DATA FETCHING</h2>
+                
+                    <input type="text" class="form-control my-3 mx-5" id="cntry" placeholder="Enter Country name"
+                        style="width: 300px; border: 2px solid olivedrab;
+                        border-radius: 4px;">
+                    <button class="btn btn-success ml-5 " onclick="fetchCountry()" id="btn" style=" width: 140px; height: 40px;">Fetch Data</button>
+                
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-4"></div>
+            <div class="col-4" id="result">
+
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
+    <script>
+        function display(country) {
+            let country_name = country[0].name;
+            let capital = country[0].capital;
+            let population = country[0].population;
+            let flag = country[0].flag;
+            let currency_name = country[0].currencies[0].name;
+            let symbol = country[0].currencies[0].symbol;
+            console.log(country_name, population, capital, currency_name, symbol);
+            let htmldata = `<div class="card" style="width: 18rem;">
+  <img src="${flag}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">${country_name}</h5>
+    <p class="card-text"><b>CAPITAL</b>  :${capital}</p>
+    <p class="card-text"><b>POPULATION</b> :${population}</p>
+    <p class="card-text"><b>CURRENCY </b>  :${currency_name}
+    <p class="card-text"><b>SYMBOL </b>:${symbol}</p>
+    
+  </div>
+</div>`
+            document.querySelector("#result").innerHTML = htmldata
+        }
+
+
+        // function fetchCountry(){
+        //         let country_name=cntry.value;
+        //         let url=`https://restcountries.eu/rest/v2/name/${country_name}?fullText=true`
+        //         var request=new XMLHttpRequest();
+        //         request.open("get",url);
+        //         request.send();
+        //         request.onreadystatechange=()=>{
+        //            if(request.readyState==4){
+        //                if (request.status>199 & request.status<300){
+        //                    let data=JSON.parse(request.responseText)
+        //                display(data);
+        //             }
+        //            }
+        //         }
+        // }
+
+        function fetchCountry() {
+            let country_name = cntry.value;
+            let url = `https://restcountries.eu/rest/v2/name/${country_name}?fullText=true`
+            fetch(url).then(response => {
+                if (!(response.ok)) {
+                    throw new Error("failed to fetch data")
+                }
+                else {
+                    return response.json()
+                }
+            }).then(data => display(data)).catch(error => alert(error.message))
+        }
+
+    </script>
+</body>
+
+</html>
